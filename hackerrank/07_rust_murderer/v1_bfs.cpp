@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<algorithm>
 #include<vector>
 #include<list>
 #include<iostream>
@@ -16,7 +15,7 @@ class BFS
 {
 	private:
 		unsigned int N,M,T;
-		vector<unsigned int>* city_roads;
+		bool** city_roads;
 		bool* is_visited;
 		unsigned int* len;
 		void run_bfs(const unsigned int start);
@@ -39,35 +38,37 @@ void BFS::process_input()
 
 		len = new unsigned int [N];
 		is_visited = new bool [N];
-		city_roads = new vector<unsigned int> [N];
+		city_roads = new bool* [N];
 		for(unsigned int i=0; i<N; i++)
 		{
 			len[i] = 0;
+			city_roads[i] = new bool [N];
 			is_visited[i] = false;
 		}
+
+		for(unsigned int i=0; i<N; i++)
+			for(unsigned int j=0; j<N; j++)
+				city_roads[i][j] = true;
 
 		for(unsigned int k=0; k<M; k++)
 		{
 			unsigned int u,v;
 			cin >> u >> v;
 			u--;v--;
-			city_roads[u].push_back(v);
-			city_roads[v].push_back(u);
+			city_roads[u][v] = false;
+			city_roads[v][u] = false;
 		}
-
-		for(unsigned int i=0; i<N; i++) { sort(city_roads[i].begin(), city_roads[i].end()); }
 
 		unsigned int start_node;
 		cin >> start_node; start_node--;
 		run_bfs(start_node);
 
 		delete [] is_visited;
-		delete [] city_roads;	
 		for(unsigned int i=0; i<N; i++)
+			delete [] city_roads[i];
+		delete [] city_roads;	
+		for(unsigned int i=1; i<N; i++)
 		{
-			if(i == start_node)
-				continue;
-
 			cout<< len[i];
 			if(i<N-1)
 				cout <<" ";
@@ -82,48 +83,19 @@ void BFS::run_bfs(const unsigned int start)
 	is_visited[start] = true;
 	list<vt> lst;
 	lst.push_back(vt(start, 0));
-	unsigned int visit_count = 1;
+
 	while(lst.size())
 	{
-
 		vt tmp = lst.front();
 		lst.pop_front();
-		unsigned int min_v=0,max_v=N;
-		if(city_roads[tmp.index].size())
-		{
-			min_v = city_roads[tmp.index][0];
-			max_v = city_roads[tmp.index][city_roads[tmp.index].size()-1];
-		}
-
 		for(unsigned int i=0; i<N; i++)
 		{
-			if(is_visited[i] == true)
+			if(is_visited[i] == false && city_roads[tmp.index][i] == true)
 			{
-				continue;
+				lst.push_back(vt(i, 1+tmp.len));
+				is_visited[i] = true;
+				len[i] = 1+tmp.len;
 			}
-			
-			bool skip_this_station = false;
-
-			if(i >= min_v && i<= max_v)
-			{
-				for(unsigned int k=0; k<city_roads[tmp.index].size(); k++)
-				{
-					if(i == city_roads[tmp.index][k])
-					{
-						skip_this_station = true;
-						break;
-					}	
-				}
-			}
-			if(true == skip_this_station)
-				continue;
-	
-			//cout<<"Src= " << tmp.index <<", dst= " << i << ", Len= " << 1+tmp.len << endl;
-			lst.push_back(vt(i, 1+tmp.len));
-			is_visited[i] = true; visit_count++;
-			len[i] = 1+tmp.len;
-			if(visit_count == N)
-				return;
 		}
 
 	}
