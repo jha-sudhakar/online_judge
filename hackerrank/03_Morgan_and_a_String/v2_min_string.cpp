@@ -253,7 +253,7 @@ void Min_str::read_intermediate_values(unsigned int& l, unsigned int& l1, unsign
 	else if(str1[tmp_l1] < str2[tmp_l2])
 	{
 		char ch = str1[l1];
-		while(l1<tmp_l1)
+		while(l1<=tmp_l1)
 		{
 			str[l++] = str1[l1++];
 			if(ch == str1[l1])
@@ -263,7 +263,7 @@ void Min_str::read_intermediate_values(unsigned int& l, unsigned int& l1, unsign
 	else if(str1[tmp_l1] > str2[tmp_l2])
 	{
 		char ch = str2[l2];
-		while(l2<tmp_l2)
+		while(l2<=tmp_l2)
 		{
 			str[l++] = str2[l2++];
 			if(ch == str2[l2])
