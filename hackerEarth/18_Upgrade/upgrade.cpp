@@ -6,12 +6,18 @@
 #include<vector>
 using namespace std;
 
+unsigned int w[100001];
+unsigned int h[100001];
+unsigned int c_to_p[100001];
+unsigned int path[100001];
+unsigned int minh_path[100001], maxh_path[100001];
+
 class Upgrade
 {
 	private:
 		unsigned int N, Q, root;
-		vector<unsigned int> w,h; 
-		vector<unsigned int> c_to_p;
+		//vector<unsigned int> w,h; 
+		//vector<unsigned int> c_to_p;
 
 		void path_sum(const unsigned int x, const unsigned int y);
 		void path_reverse(const unsigned int x, const unsigned int y);
@@ -26,9 +32,7 @@ void Upgrade::read_input()
 {
 	root = 0;
 	cin >> N >> Q;
-	w.resize(N+1);
-	h.resize(N+1);
-	c_to_p.resize(N+1);
+	//w.resize(N+1);	h.resize(N+1); 	c_to_p.resize(N+1);
 
 	c_to_p[0] = 0;
 	w[0] = h[0]= 0;
@@ -58,40 +62,55 @@ void Upgrade::read_input()
 	}
 	if(root == 0)
 		assert(false);
-	//cout << "Root= " << root << endl;
+#if DBG
+	cout << "Root= " << root << endl;
+#endif
 }
 
 
 
 void Upgrade::build_child_height()
 {
-	h[root] = 1;
+	unsigned int update_count =0;
+	h[root] = 1; update_count++;
 	for(unsigned int i=1;i<=N; i++)
 	{
 		if(h[i] != 0)
 			continue;
-		vector<unsigned int> path;
+		//vector<unsigned int> path;
+		unsigned int path_len = 0;
 		unsigned int cur = i;
 		while(h[cur] == 0)
 		{
-			path.push_back(cur);
+			//path.push_back(cur);
+			path[path_len++] = cur;
 			cur = c_to_p[cur]; // Go to its parent;
 		}
 		unsigned int h_start = h[cur];
-		for(unsigned int k=path.size(); k>0; k--)
+		//for(unsigned int k=path.size(); k>0; k--)
+		for(unsigned int k = path_len; k>0; k--)
 		{
 			//h_start++;
 			h[path[k-1]] = ++h_start;
+			update_count++;
 		}
+		if(update_count == N) break;
 	}
-
+#if DBG
+	cout << endl;
+	for(unsigned int i=1; i<=N; i++)
+		cout << "Node= " << i << ",\t Height= " << h[i] << endl;
+#endif
 }
 
 void Upgrade::path_sum(const unsigned int x, const unsigned int y)
 {
 	unsigned int path_sum = 0;
 	if(x == y)
+	{
 		cout << w[x] << endl;
+		return;
+	}
 
 	unsigned int min_node, max_node;
 	if(h[x] <=h[y])
@@ -129,7 +148,10 @@ void Upgrade::path_reverse(const unsigned int x, const unsigned int y)
 	if(x == y)
 		return;	
 
-	vector<unsigned int> minh_path, maxh_path;
+	//vector<unsigned int> minh_path, maxh_path;
+	unsigned int minh_len, maxh_len, all_len;
+	minh_len = maxh_len = all_len = 0;
+
 	unsigned int min_node, max_node;
 	if(h[x] <=h[y])
 	{
@@ -144,33 +166,53 @@ void Upgrade::path_reverse(const unsigned int x, const unsigned int y)
 	
 	while(h[max_node] != h[min_node])
 	{
-		maxh_path.push_back(max_node);
+		//maxh_path.push_back(max_node);
+		maxh_path[maxh_len++] = max_node;
 		max_node = c_to_p[max_node];
 	}
 
 	while(max_node != min_node)
 	{
-		maxh_path.push_back(max_node);
+		//maxh_path.push_back(max_node);
+		maxh_path[maxh_len++] = max_node;
 		max_node = c_to_p[max_node];
 
-		minh_path.push_back(min_node);
+		//minh_path.push_back(min_node);
+		minh_path[minh_len++] = min_node;
 		min_node = c_to_p[min_node];
 	}
-	maxh_path.push_back(max_node); // Common node is added to longer path.
+	//maxh_path.push_back(max_node); // Common node is added to longer path.
+	maxh_path[maxh_len++] = max_node;
 	
-	// Now merge the smaller vector to bigger one.
-	for(unsigned int k=minh_path.size(); k>0; k--)
+	unsigned int mid_len = (maxh_len+minh_len)/2;
+	unsigned int l_ptr = 0;
+	unsigned int r_ptr = 0;//minh_len-1;
+	unsigned int *r_arr_ptr = minh_path;
+	bool is_one_arr = false;
+	if(minh_len == 0)
 	{
-		maxh_path.push_back(minh_path[k-1]);
+		is_one_arr = true;
+		r_ptr = maxh_len-1;
+		r_arr_ptr = maxh_path;
 	}
 
-	unsigned int i=0, j=maxh_path.size()-1;
-	while(i<j)
+	for(unsigned int i=0; i<mid_len; i++)
 	{
-		unsigned int tmp = w[maxh_path[i]];
-		w[maxh_path[i]] = w[maxh_path[j]];;
-		w[maxh_path[j]] = tmp;
-		i++; j--;
+		unsigned int tmp = w[maxh_path[l_ptr]];
+		w[maxh_path[l_ptr]] = w[r_arr_ptr[r_ptr]];;
+		w[r_arr_ptr[r_ptr]] = tmp;
+		if(is_one_arr == false && r_ptr == minh_len-1 )
+		{
+			is_one_arr = true;
+			r_ptr = maxh_len;
+			r_arr_ptr = maxh_path;
+		}
+		if(is_one_arr == true)
+			r_ptr--;
+		else
+			r_ptr++;
+
+		l_ptr++;
 	}
 
 }
