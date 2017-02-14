@@ -1,0 +1,11 @@
+pq_with_updateKey.cpp: In member function ‘void PQ::test_automation()’:
+pq_with_updateKey.cpp:93:6: error: ‘pos’ was not declared in this scope
+      pos = k;
+      ^
+pq_with_updateKey.cpp:95:7: error: name lookup of ‘k’ changed for ISO ‘for’ scoping [-fpermissive]
+    if(k > vec.size()) assert(false);
+       ^
+pq_with_updateKey.cpp:95:7: note: (if you use ‘-fpermissive’ G++ will accept your code)
+pq_with_updateKey.cpp:97:12: error: ‘val’ was not declared in this scope
+    cout << val << ", ";
+            ^
