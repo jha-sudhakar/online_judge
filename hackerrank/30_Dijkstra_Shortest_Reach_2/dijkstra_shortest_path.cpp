@@ -1,4 +1,5 @@
 #include<limits.h>
+#include<stdio.h>
 
 #include<assert.h>
 #include<stdlib.h>
@@ -9,7 +10,7 @@
 using namespace std;
 
 #define MAX 3001
-
+#define MAX_W 1000000000
 //---------------------- jha1 ---------------------------------
 struct node
 {
@@ -33,7 +34,6 @@ class PQ
 		void send_down(unsigned int pos);
 	public:
 		PQ() { srand(time(NULL)); size= 0; start = 1; }
-		void test_automation();
 		const unsigned int get_size() { return size; }
 		void read_input();
 		void build_heap(const unsigned int L);
@@ -41,73 +41,8 @@ class PQ
 		void update_key(unsigned int new_key_val, unsigned int index);	
 		const node root();
 		const node pop_root();
+		void reset() { size= 0; start = 1;}
 };
-
-void PQ::test_automation()
-{
-
-	unsigned int l=0,loop = 20000;
-	while(l++<loop)
-	{
-		unsigned int counter=1;
-		unsigned int rand_size = 20 + rand()%500;
-		cout <<"\nRunning loop " << l << ", op-count= " << rand_size << endl;
-		vector<node> vec;
-		cout <<"\nInsert/pop elements\n";
-		for(unsigned int i=0; i<rand_size; i++)
-		{
-			unsigned int num = 10+ rand()%50;
-			if(rand()%3)
-			{
-				
-				vec.push_back(node(num,counter));
-				insert(node(num,counter));
-				cout << num << ", ";
-				counter++;
-			}
-			else if(get_size())
-			{
-				node tmp = pop_root();
-				unsigned int pos=vec.size()+1;
-				for(unsigned int k=0; k<vec.size(); k++)
-				{
-					if(vec[k].key < tmp.key)
-						assert(false);
-					else if(vec[k].key == tmp.key && vec[k].index == tmp.index)
-						 pos = k;
-				}
-				if(pos >= vec.size()) assert(false);
-				vec.erase(vec.begin()+pos);
-			}
-			if(get_size() != vec.size())
-				assert(false);
-		}
-		
-		cout <<"\nMy Sorted elements\n";
-		
-		while(get_size())
-		{
-			node tmp = pop_root();
-			unsigned int pos=vec.size()+1;
-			for(unsigned int k=0; k<vec.size(); k++)
-			{
-				if(vec[k].key < tmp.key)
-					assert(false);
-				else if(vec[k].key == tmp.key && vec[k].index == tmp.index)
-					pos = k;
-			}
-			if(pos >= vec.size()) assert(false);
-			vec.erase(vec.begin()+pos);
-			cout << tmp.key << ", ";
-		
-			if(get_size() != vec.size())
-			assert(false);
-		}
-		cout << endl;
-		if(get_size() != vec.size())
-			assert(false);
-	}
-}
 
 void PQ::swap_val(node& val1, node& val2)
 {
@@ -126,7 +61,7 @@ void PQ::build_heap(const unsigned int L)
 	for(unsigned int i=1; i<=L; i++)
 	{
 		size++;
-		arr[size] = node(UINT_MAX, i);
+		arr[size] = node(MAX_W, i);
     	addr[i] = size;
 	}
 }
@@ -245,20 +180,25 @@ class ssp
 void ssp::read_input()
 {
 	cin >> T;
+	graph.reserve(3005);
 	unsigned int x,y,r;
 	for(unsigned int i=0; i<T; i++)
 	{
-		cin >> N >> M;
+		pq.reset();
+		//cin >> N >> M;
+		scanf("%u %u", &N, &M);
 		dist = new unsigned int[N+1];
-		for(unsigned int j=0; j<=N; j++) dist[j] = UINT_MAX;
+		for(unsigned int j=0; j<=N; j++) dist[j] = MAX_W;
 		graph.resize(N+1);
 		for(unsigned int j=0; j<M; j++)
 		{
-			cin >> x >> y >> r;
+			//cin >> x >> y >> r;
+			scanf("%u %u %u", &x, &y, &r);
 			graph[x].push_back(e(y,r));
 			graph[y].push_back(e(x,r));
 		}
-		cin >> S;
+		//cin >> S;
+		scanf("%u", &S);
 		find_shortest_paths();	
 		graph.clear();
 		delete [] dist;
@@ -274,6 +214,8 @@ void ssp::find_shortest_paths()
 	while(pq.get_size())
 	{
 		node top = pq.pop_root();
+		if(top.key == MAX_W)
+			break;
 		dist[top.index] = top.key;
 		for(unsigned int k=0; k<graph[top.index].size(); k++)
 		{
@@ -288,12 +230,12 @@ void ssp::find_shortest_paths()
 	{
 		if(p == S) 
 			continue;
-		else if(dist[p] == UINT_MAX)
-			cout << -1 << " ";
+		else if(dist[p] == MAX_W)
+			printf("%d ", -1);//cout << -1 << " ";
 		else
-			cout << dist[p] << " ";
+			printf("%u ", dist[p]);//cout << dist[p] << " ";
 	}
-	cout <<endl;
+	printf("\n");//cout <<endl;
 }
 
 int main()
