@@ -1,4 +1,5 @@
-===================================================================
+========== If git version is new like 2.7.4, else first update git as shown below =================================
+==================================================================
 #repository name  = online_judge
 
 rm -Rf online_judge/
@@ -15,6 +16,33 @@ git config user.email "jhasahj@gmail.com"
 
 git commit -m "1st commit"
 git push origin master
+
+
+==================================================================
+git will not work if version is older like 1.7.10, so update it as following in hortonworks box.
+https://stackoverflow.com/questions/21820715/how-to-install-latest-version-of-git-on-centos-6-x-7-x
+Answer by AmirHd at above stackover flow question.
+
+yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+#yum install  gcc perl-ExtUtils-MakeMaker
+yum install       perl-ExtUtils-MakeMaker
+yum remove git
+
+cd /usr/src
+wget https://www.kernel.org/pub/software/scm/git/git-2.7.4.tar.gz
+tar xzf git-2.7.4.tar.gz
+
+cd git-2.7.4
+make prefix=/usr/local/git all
+make prefix=/usr/local/git install
+
+echo 'export PATH=$PATH:/usr/local/git/bin' >> /etc/bashrc
+or
+echo 'export PATH=$PATH:/usr/local/git/bin' > /etc/profile.d/git.sh
+
+source /etc/bashrc
+git --version
+
 
 ===========================================================================================================================
 /media/sf_edx> rm -Rf online_judge/
