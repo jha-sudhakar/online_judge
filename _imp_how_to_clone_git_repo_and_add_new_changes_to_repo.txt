@@ -14,7 +14,7 @@ git config user.name "sudhakar jha"
 git config user.email "jhasahj@gmail.com"
 
 git commit -m "1st commit"
-
+git push origin master
 
 ===========================================================================================================================
 /media/sf_edx> rm -Rf online_judge/
