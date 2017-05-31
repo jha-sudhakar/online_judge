@@ -1,4 +1,4 @@
-========== If git version is new like 2.7.4, else first update git as shown below =================================
+==========********* If git version is new like 2.7.4, else first update git as shown below *************=======
 ==================================================================
 #repository name  = online_judge
 
@@ -23,9 +23,9 @@ git will not work if version is older like 1.7.10, so update it as following in 
 https://stackoverflow.com/questions/21820715/how-to-install-latest-version-of-git-on-centos-6-x-7-x
 Answer by AmirHd at above stackover flow question.
 
-yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
-#yum install  gcc perl-ExtUtils-MakeMaker
-yum install       perl-ExtUtils-MakeMaker
+yum install  -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+#yum install -y  gcc perl-ExtUtils-MakeMaker
+yum install  -y perl-ExtUtils-MakeMaker
 yum remove git
 
 cd /usr/src
