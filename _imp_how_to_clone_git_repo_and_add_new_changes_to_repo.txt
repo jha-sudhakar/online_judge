@@ -4,6 +4,8 @@
 
 rm -Rf online_judge/
 git clone https://github.com/jha-sudhakar/online_judge
+
+cd online_judge
 git remote
 git remote -v
 
