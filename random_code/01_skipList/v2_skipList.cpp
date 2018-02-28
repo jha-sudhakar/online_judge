@@ -22,7 +22,6 @@ struct node
 class Sklist
 {
 	private:
-		unsigned int th, ts;
 		const int MIN_VAL;
 		struct node* root;
 		multiset<int> sorted_arr;
@@ -37,10 +36,7 @@ class Sklist
 		void print_multi_set();
 		void add(int ele);
 		void add_min_val();
-	
-		void remove(int ele);
-		void remove_min_val();
-
+		//void remove(int ele);
 		bool search(int ele);
 	
 };
@@ -49,7 +45,6 @@ Sklist::Sklist() :MIN_VAL(0)
 {
 	srand(time(NULL));
 	root = new node(MIN_VAL);
-	th= ts = 0;
 }
 
 Sklist::~Sklist()
@@ -116,34 +111,16 @@ void Sklist::test_execute(int loop, int max_test_size)
 		for(int i=0; i<test_size; i++)
 		{
 			int ele = rand()% max_test_size;
-			int rand_val = rand()%5;
-			if(rand_val>2)
+			if(rand()%4)
 			{
-				//cout << "Add " << ele << endl;
+				cout << "Inserting " << ele << endl;
 				add(ele);
 				sorted_arr.insert(ele);
-				//print_skip_list(); 
-				//print_multi_set();
-				ts++;
-			}
-			else if(rand_val>0)
-			{
-				//cout << "Rem " << ele << endl;
-				if(true == search(ele))
-					ts--;
-				remove(ele);
-
-				sorted_arr_itr = sorted_arr.find(ele);
-				if(sorted_arr_itr != sorted_arr.end())
-					sorted_arr.erase(sorted_arr_itr);
-
 				//print_skip_list();
-				//print_multi_set();
-				
 			}
 			else
 			{
-				//cout << "\tSearching " << ele << endl;
+				cout << "\tSearching " << ele << endl;
 				bool ret1 = search(ele);
 				bool ret2 = true;
 				sorted_arr_itr = sorted_arr.find(ele);
@@ -162,7 +139,6 @@ void Sklist::test_execute(int loop, int max_test_size)
 		cout << "********************* Completed loop " << cur_loop << endl << endl;
 		cur_loop++;
 	}
-	//cout <<"\n Height = " << th <<", Size = " << ts <<" ==> height/size = " << float(th) / float(ts) << endl;
 }
 
 void Sklist::destry_skip_list()
@@ -189,7 +165,6 @@ void Sklist::add_min_val()
 	{
 		ptr->count++;
 		ptr = ptr->down;
-		th++;
 	}
 }
 
@@ -252,71 +227,6 @@ void Sklist::add(const int ele)
 	}while(rand()%2);
 }
 
-void Sklist::remove_min_val()
-{	
-	node* ptr = root;
-	while(ptr != NULL)
-	{
-		if(ptr->count == 1)
-			break;
-		ptr->count--;
-		ptr = ptr->down;
-	}
-}
-
-void Sklist::remove(int ele)
-{
-	if(ele == MIN_VAL)
-	{
-		remove_min_val();
-		return;
-	}
-
-	vector<node*> node_path;
-	node* ptr = root;
-	do
-	{
-		while(ptr->next != NULL && ptr->next->data <ele)
-		{
-			ptr = ptr->next;
-		}
-		node_path.push_back(ptr);
-		ptr = ptr->down;
-
-	} while(ptr != NULL);
-
-	if(node_path[node_path.size()-1]->next == NULL)
-	{
-		return;
-	}
-	else if(node_path[node_path.size()-1]->next->data != ele)
-	{
-		return;
-	}
-
-	for(unsigned int i=0; i<node_path.size(); i++)
-	{
-		int index = node_path.size()-1-i;
-		if(node_path[index]->next != NULL && node_path[index]->next->data == ele)
-		{
-			if(node_path[index]->next->count == 1)
-			{
-				node* del_ptr = node_path[index]->next;
-				node_path[index]->next = del_ptr->next;
-				delete del_ptr;
-			}
-			else
-			{
-				node_path[index]->next->count--;
-			}
-		
-		}
-		else
-		{
-			//TODO:- add logic to break and try.
-		}
-	}
-}
 
 bool Sklist::search(int ele)
 {

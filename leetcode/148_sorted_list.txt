@@ -1,0 +1,19 @@
+#include<iostream>
+using namespace std;
+
+#if 1
+ struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(NULL) {}
+ };
+#endif
+
+class Solution
+{
+	public:
+		ListNode* sortList(ListNode* head)
+		{
+        
+		}
+};

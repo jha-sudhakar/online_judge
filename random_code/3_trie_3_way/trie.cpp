@@ -1,0 +1,12 @@
+
+
+
+class Trie
+{
+	private:
+		
+
+
+	public:
+
+};
