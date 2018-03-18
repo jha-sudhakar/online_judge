@@ -1,0 +1,11 @@
+
+
+class Mpss
+{
+	private:
+
+
+	public:
+
+
+};
