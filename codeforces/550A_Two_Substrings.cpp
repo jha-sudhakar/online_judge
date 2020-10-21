@@ -15,7 +15,7 @@ long int string_pos (long int N, long int s, const char ch[3])
 		s++;
 	}
 
-	if(s+1 >= N)
+	if(s+1 >= N) // In main() function calling with __ start+2 __  can be bigger than N
 	{
 		return -1;
 	}
