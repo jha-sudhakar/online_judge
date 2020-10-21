@@ -3,7 +3,7 @@
 using namespace std;
 
 string str;
-int string_pos (int N, int s, const char ch[3])
+long int string_pos (long int N, long int s, const char ch[3])
 {
 
 	while(s+1 < N)
@@ -15,7 +15,7 @@ int string_pos (int N, int s, const char ch[3])
 		s++;
 	}
 
-	if(s+1 == N)
+	if(s+1 >= N)
 	{
 		return -1;
 	}
@@ -24,15 +24,16 @@ int string_pos (int N, int s, const char ch[3])
 
 int main()
 {
-	cin >> str;
-	int N = str.size();
+	//cin >> str;
+	getline(cin, str);
+	long int N = str.size();
 	if(N < 4)
 	{
 		cout << "NO";
 		return 0;
 	}
 
-	int start_index = string_pos(N, 0, "AB");
+	long int start_index = string_pos(N, 0, "AB");
 	if(start_index == -1)
 	{
 		cout <<"NO";
