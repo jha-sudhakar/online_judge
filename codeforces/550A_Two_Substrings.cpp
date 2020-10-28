@@ -22,6 +22,7 @@ long int string_pos (long int N, long int s, const char ch[3])
 	return s;
 }
 
+#if 0
 int main()
 {
 	//cin >> str;
@@ -65,3 +66,4 @@ int main()
 	cout << "YES";
 	return 0;
 }
+#endif
