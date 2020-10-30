@@ -1,4 +1,6 @@
 /*
+* https://www.topcoder.com/single-round-match-789-editorials/
+*
 Single Round Match 789 Round 1 - Division II, Level Two
 Definition
 	Class:	StringsBetween
@@ -82,6 +84,7 @@ class StringsBetween
 
 };
 
+#if 0
 int main(int argc, char* argv[])
 {
 	int l = 1;
@@ -103,3 +106,4 @@ int main(int argc, char* argv[])
 	cout << "Output = " << val << endl;
 	return 0;	
 }
+#endif
